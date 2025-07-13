@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "733213243930",
+    "project_id": "akademik-app",
+    "storage_bucket": "akademik-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733213243930:android:f2d1bc1780cdcf01166fa3",
+        "android_client_info": {
+          "package_name": "com.example.akademik_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsT91JKVH8iaNi85fXDTpoKmjAtQHRseo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
