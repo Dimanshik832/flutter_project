@@ -1,0 +1,93 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub/
+build/
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-plugins-dependencies
+.flutter-plugins
+generated_plugin_registrant.*
+flutter_export_environment.sh
+
+# Android
+android/.gradle/
+android/captures/
+android/.idea/
+android/local.properties
+android/app/google-services.json
+*.jks
+*.keystore
+
+# iOS
+ios/.symlinks/
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/.generated/
+ios/Runner/GeneratedPluginRegistrant.*
+
+# macOS
+macos/.generated/
+macos/Flutter/ephemeral/
+macos/Pods/
+macos/Runner.xcworkspace/
+macos/Flutter/flutter_export_environment.sh
+
+# Web
+web/.dart_tool/
+
+# Windows
+windows/flutter/ephemeral/
+windows/flutter/generated_plugin_registrant.*
+windows/runner/ephemeral/
+windows/runner/generated_plugin_registrant.*
+
+# Linux
+linux/flutter/ephemeral/
+linux/flutter/generated_plugin_registrant.*
+
+# VS Code / IntelliJ / Android Studio
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Firebase / Secrets
+firebase.json
+*.keystore
+*.jks
+
+# Misc
+*.log
+*.tmp
+*.swp
+*.lock
+.DS_Store
+*.bak
+*.old
+*.orig
+*.rej
+*.sublime-workspace
+*.sublime-project
+
+# Coverage / test output
+coverage/
+lcov.info
+
+# Others
+*.class
+*.pyc
+*.pyo
+*.exe
+*.dll
+*.so
+*.dylib
+*.gz
+*.zip
+*.rar
