@@ -1,6 +1,6 @@
-# akademik_app
+# DormFix
 
-A new Flutter project.
+Universal maintenance/reporting app (students, admins, firms, workers).
 
 ## Getting Started
 

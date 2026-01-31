@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/firestore_paths.dart';
 
 class Firm {
   final String? id;
@@ -19,22 +20,22 @@ class Firm {
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'ownerId': ownerId,
+      FirestoreFirmFields.name: name,
+      FirestoreFirmFields.ownerId: ownerId,
       'categories': categories,
-      'workerIds': workerIds,
-      'createdAt': createdAt,
+      FirestoreFirmFields.workerIds: workerIds,
+      FirestoreFirmFields.createdAt: createdAt,
     };
   }
 
   factory Firm.fromMap(Map<String, dynamic> map, String id) {
     return Firm(
       id: id,
-      name: map['name'] ?? '',
-      ownerId: map['ownerId'] ?? '',
+      name: map[FirestoreFirmFields.name] ?? '',
+      ownerId: map[FirestoreFirmFields.ownerId] ?? '',
       categories: List<String>.from(map['categories'] ?? []),
-      workerIds: List<String>.from(map['workerIds'] ?? []),
-      createdAt: map['createdAt'] ?? Timestamp.now(),
+      workerIds: List<String>.from(map[FirestoreFirmFields.workerIds] ?? []),
+      createdAt: map[FirestoreFirmFields.createdAt] ?? Timestamp.now(),
     );
   }
 }

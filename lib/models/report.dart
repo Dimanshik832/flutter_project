@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/firestore_paths.dart';
 
 class Report {
   final String? id;
   final String title;
   final String description;
   final String status;
-  final String roomNumber;
+  final String room; 
   final String category;
   final List<String> imageUrls;
   final Timestamp createdAt;
@@ -16,7 +17,7 @@ class Report {
     required this.title,
     required this.description,
     required this.status,
-    required this.roomNumber,
+    required this.room,       
     required this.category,
     required this.imageUrls,
     required this.createdAt,
@@ -25,28 +26,31 @@ class Report {
 
   Map<String, dynamic> toMap() {
     return {
-      'title': title,
+      FirestoreReportFields.title: title,
       'description': description,
       'status': status,
-      'roomNumber': roomNumber,
+      'room': room,            
       'category': category,
-      'images': imageUrls,
-      'createdAt': createdAt,
-      'userId': userId,
+      FirestoreReportFields.images: imageUrls,
+      FirestoreReportFields.createdAt: createdAt,
+      FirestoreReportFields.userId: userId,
     };
   }
 
   factory Report.fromMap(Map<String, dynamic> map, String id) {
     return Report(
       id: id,
-      title: map['title'] ?? '',
+      title: map[FirestoreReportFields.title] ?? '',
       description: map['description'] ?? '',
       status: map['status'] ?? 'Submitted',
-      roomNumber: map['roomNumber'] ?? '',
+
+      
+      room: map['room'] ?? map[FirestoreReportFields.roomNumber] ?? '',
+
       category: map['category'] ?? 'Other',
-      imageUrls: List<String>.from(map['images'] ?? []),
-      createdAt: map['createdAt'] ?? Timestamp.now(),
-      userId: map['userId'] ?? '',
+      imageUrls: List<String>.from(map[FirestoreReportFields.images] ?? []),
+      createdAt: map[FirestoreReportFields.createdAt] ?? Timestamp.now(),
+      userId: map[FirestoreReportFields.userId] ?? '',
     );
   }
 }

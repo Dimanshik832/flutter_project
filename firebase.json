@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"akademik-app","appId":"1:733213243930:android:f2d1bc1780cdcf01166fa3","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"akademik-app","configurations":{"android":"1:733213243930:android:f2d1bc1780cdcf01166fa3","ios":"1:733213243930:ios:7d905172e3311094166fa3"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "akademik-app",
+          "appId": "1:733213243930:android:f2d1bc1780cdcf01166fa3",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "akademik-app",
+          "configurations": {
+            "android": "1:733213243930:android:f2d1bc1780cdcf01166fa3",
+            "ios": "1:733213243930:ios:7d905172e3311094166fa3"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}
