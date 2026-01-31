@@ -80,11 +80,11 @@ class _AuthScreenState extends State<AuthScreen> {
     setState(() => isLoading = false);
   }
 
-  Future<void> _quickLogin(String email, {String password = '1234567'}) async {
+  Future<void> _quickLogin(String email, {String? password}) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
-        password: password,
+        password: password ?? email,
       );
     } catch (e) {
       final l10n = AppLocalizations.of(context)!;
@@ -234,20 +234,30 @@ class _AuthScreenState extends State<AuthScreen> {
                   children: [
                     _quickButton(
                         "user",
-                            () => _quickLogin("dm3348412@gmail.com")),
+                            () => _quickLogin(
+                              "dm3348411@gmail.com",
+                              password: "dm3348411@gmail.com",
+                            )),
                     _quickButton(
                         "firmowner",
-                            () => _quickLogin("dm3348413@gmail.com")),
+                            () => _quickLogin(
+                              "dm3348413@gmail.com",
+                              password: "dm3348413@gmail.com",
+                            )),
                     _quickButton(
                         "admin",
-                            () => _quickLogin("dm3348411@gmail.com")),
+                            () => _quickLogin(
+                              "dm3348412@gmail.com",
+                              password: "dm3348412@gmail.com",
+                            )),
                     _quickButton(
                       "firmworker",
-                          () => _quickLogin(
-                        "dmytromorozov57@gmail.com",
-                        password: "dmytromorozov57@gmail.com",
-                      ),
-                    ),
+                            () => _quickLogin(
+                              "artidktc@gmail.com",
+                              password: "artidktc@gmail.com",
+                            )),
+
+
                   ],
                 ),
               ],
