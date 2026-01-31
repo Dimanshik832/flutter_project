@@ -12,7 +12,7 @@ class ManageParticipantsScreen extends StatefulWidget {
 }
 
 class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
-  final List<String> roles = ['user', 'firmowner', 'firmworker', 'admin', 'banned'];
+  final List<String> roles = ['user', 'firmowner', 'firmworker', 'admin'];
   String searchQuery = "";
 
   String? currentAdminUid;
@@ -44,6 +44,28 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
     );
   }
 
+  Future<void> _updateBanStatus(String uid, bool isBanned, {String? currentRole}) async {
+    final l10n = AppLocalizations.of(context)!;
+    if (uid == currentAdminUid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.cannotBanYourself)),
+      );
+      return;
+    }
+
+    final updates = <String, dynamic>{
+      FirestoreUserFields.isBanned: isBanned,
+    };
+    if (!isBanned && currentRole != null && currentRole.toLowerCase() == 'banned') {
+      updates[FirestoreUserFields.role] = 'user';
+    }
+
+    await FirebaseFirestore.instance.collection(FirestoreCollections.users).doc(uid).update(updates);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(isBanned ? l10n.ban : l10n.unban)),
+    );
+  }
   
   
   
@@ -76,14 +98,14 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
     );
 
     if (ok == true) {
-      await _updateRole(uid, "banned");
+      await _updateBanStatus(uid, true);
     }
   }
 
   
   
   
-  Future<void> _unbanUser(String uid, String email) async {
+  Future<void> _unbanUser(String uid, String email, String currentRole) async {
     final l10n = AppLocalizations.of(context)!;
     final ok = await showDialog<bool>(
       context: context,
@@ -105,7 +127,7 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
     );
 
     if (ok == true) {
-      await _updateRole(uid, "user");
+      await _updateBanStatus(uid, false, currentRole: currentRole);
     }
   }
 
@@ -128,7 +150,7 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
   
   
   
-  Widget _roleBadge(String role) {
+  Widget _roleBadge(String role, bool isBanned) {
     Color color;
 
     switch (role) {
@@ -141,14 +163,25 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
       case "firmworker":
         color = Colors.green;
         break;
-      case "banned":
-        color = Colors.black;
-        break;
       default:
         color = Colors.grey;
     }
 
-    return Container(
+    if (isBanned && role == "banned") {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          _roleLabel("banned"),
+          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+        ),
+      );
+    }
+
+    final roleBadge = Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withOpacity(0.15),
@@ -158,6 +191,27 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
         _roleLabel(role),
         style: TextStyle(color: color, fontWeight: FontWeight.w700),
       ),
+    );
+
+    if (!isBanned) return roleBadge;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        roleBadge,
+        const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            _roleLabel("banned"),
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+          ),
+        ),
+      ],
     );
   }
 
@@ -169,7 +223,11 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
     final uid = doc.id;
     final name = data[FirestoreUserFields.name] ?? "";
     final email = data[FirestoreUserFields.email] ?? "";
-    final role = data[FirestoreUserFields.role] ?? "user";
+    final role = (data[FirestoreUserFields.role] ?? "user").toString().toLowerCase();
+    final hasBanField = data.containsKey(FirestoreUserFields.isBanned);
+    final isBanned = hasBanField
+        ? data[FirestoreUserFields.isBanned] == true
+        : role.toString().toLowerCase() == "banned";
 
     final bool isSelf = uid == currentAdminUid;
 
@@ -248,14 +306,14 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
                   ],
                 ),
               ),
-              _roleBadge(role),
+              _roleBadge(role, isBanned),
             ],
           ),
 
           const SizedBox(height: 16),
 
           
-          if (role != "banned")
+          if (!isBanned)
             AbsorbPointer(
               absorbing: isSelf, 
               child: Opacity(
@@ -287,7 +345,7 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
           const SizedBox(height: 12),
 
           
-          if (role != "banned")
+          if (!isBanned)
             AbsorbPointer(
               absorbing: isSelf,
               child: Opacity(
@@ -317,9 +375,9 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
             ),
 
           
-          if (role == "banned")
+          if (isBanned)
             GestureDetector(
-              onTap: () => _unbanUser(uid, email),
+              onTap: () => _unbanUser(uid, email, role),
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -431,11 +489,36 @@ class _ManageParticipantsScreenState extends State<ManageParticipantsScreen> {
                         name.contains(searchQuery);
                   }).toList();
 
-                  final admins = filtered.where((u) => (u[FirestoreUserFields.role] ?? "").toLowerCase() == "admin").toList();
-                  final owners = filtered.where((u) => (u[FirestoreUserFields.role] ?? "").toLowerCase() == "firmowner").toList();
-                  final workers = filtered.where((u) => (u[FirestoreUserFields.role] ?? "").toLowerCase() == "firmworker").toList();
-                  final users = filtered.where((u) => (u[FirestoreUserFields.role] ?? "").toLowerCase() == "user").toList();
-                  final banned = filtered.where((u) => (u[FirestoreUserFields.role] ?? "").toLowerCase() == "banned").toList();
+                  bool isUserBanned(Map<String, dynamic> data) {
+                    final hasBanField = data.containsKey(FirestoreUserFields.isBanned);
+                    if (hasBanField) return data[FirestoreUserFields.isBanned] == true;
+                    return (data[FirestoreUserFields.role] ?? "").toString().toLowerCase() == "banned";
+                  }
+
+                  final admins = filtered.where((u) {
+                    final data = u.data() as Map<String, dynamic>;
+                    return !isUserBanned(data) &&
+                        (data[FirestoreUserFields.role] ?? "").toString().toLowerCase() == "admin";
+                  }).toList();
+                  final owners = filtered.where((u) {
+                    final data = u.data() as Map<String, dynamic>;
+                    return !isUserBanned(data) &&
+                        (data[FirestoreUserFields.role] ?? "").toString().toLowerCase() == "firmowner";
+                  }).toList();
+                  final workers = filtered.where((u) {
+                    final data = u.data() as Map<String, dynamic>;
+                    return !isUserBanned(data) &&
+                        (data[FirestoreUserFields.role] ?? "").toString().toLowerCase() == "firmworker";
+                  }).toList();
+                  final users = filtered.where((u) {
+                    final data = u.data() as Map<String, dynamic>;
+                    return !isUserBanned(data) &&
+                        (data[FirestoreUserFields.role] ?? "").toString().toLowerCase() == "user";
+                  }).toList();
+                  final banned = filtered.where((u) {
+                    final data = u.data() as Map<String, dynamic>;
+                    return isUserBanned(data);
+                  }).toList();
 
                   return ListView(
                     children: [

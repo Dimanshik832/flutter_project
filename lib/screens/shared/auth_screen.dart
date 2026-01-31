@@ -54,6 +54,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
             
             FirestoreUserFields.role: 'usernau',
+            FirestoreUserFields.isBanned: false,
             FirestoreUserFields.applicationStatus: 'none',
 
             

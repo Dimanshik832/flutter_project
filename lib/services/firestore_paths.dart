@@ -12,6 +12,7 @@ class FirestoreCollections {
 
 class FirestoreUserFields {
   static const String role = 'role';
+  static const String isBanned = 'isBanned';
   static const String fcmToken = 'fcmToken';
   static const String notificationSettings = 'notificationSettings';
   static const String applicationStatus = 'applicationStatus';

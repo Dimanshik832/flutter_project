@@ -852,7 +852,7 @@ Future<void> _submitRequest() async {
                     l10n.fullName,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey.shade800,
+                      color: isDark ? Colors.white : Colors.grey.shade800,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -861,10 +861,16 @@ Future<void> _submitRequest() async {
                 TextField(
                   controller: _fullNameController,
                   enabled: !isPending,
+                  style: TextStyle(
+                    color: isDark ? Colors.white : theme.colorScheme.onSurface,
+                  ),
                   decoration: InputDecoration(
                     hintText: l10n.nameAndSurname,
+                    hintStyle: TextStyle(
+                      color: isDark ? Colors.grey[400] : Colors.black54,
+                    ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: isDark ? theme.cardColor : Colors.white,
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 12,
@@ -882,7 +888,7 @@ Future<void> _submitRequest() async {
                     l10n.album,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey.shade800,
+                      color: isDark ? Colors.white : Colors.grey.shade800,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -891,10 +897,16 @@ Future<void> _submitRequest() async {
                 TextField(
                   controller: _albumController,
                   enabled: !isPending,
+                  style: TextStyle(
+                    color: isDark ? Colors.white : theme.colorScheme.onSurface,
+                  ),
                   decoration: InputDecoration(
                     hintText: l10n.studentAlbumNumber,
+                    hintStyle: TextStyle(
+                      color: isDark ? Colors.grey[400] : Colors.black54,
+                    ),
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: isDark ? theme.cardColor : Colors.white,
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 12,

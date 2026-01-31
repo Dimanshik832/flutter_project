@@ -58,14 +58,18 @@ class _MainNavigationState extends State<MainNavigation> {
         final data = snapshot.data!.data() as Map<String, dynamic>;
         final normalizedRole =
             UserRoleService.normalizeRole(data[FirestoreUserFields.role]?.toString());
-        final isBanned = normalizedRole == 'banned';
+        final hasBanField = data.containsKey(FirestoreUserFields.isBanned);
+        final isBanned = hasBanField
+            ? data[FirestoreUserFields.isBanned] == true
+            : normalizedRole == 'banned';
+        final isPending = normalizedRole == 'usernau';
 
         return Scaffold(
           body: IndexedStack(
             index: _currentIndex,
             children: _tabs,
           ),
-          bottomNavigationBar: isBanned ? null : _buildBottomBar(),
+          bottomNavigationBar: (isBanned || isPending) ? null : _buildBottomBar(),
         );
       },
     );
