@@ -80,19 +80,6 @@ class _AuthScreenState extends State<AuthScreen> {
     setState(() => isLoading = false);
   }
 
-  Future<void> _quickLogin(String email, {String password = '1234567'}) async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } catch (e) {
-      final l10n = AppLocalizations.of(context)!;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${l10n.loginFailed} $email')),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,39 +204,9 @@ class _AuthScreenState extends State<AuthScreen> {
 
                 const SizedBox(height: 40),
 
-                Text(
-                  l10n.quickLogin,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    color: primary,
-                  ),
-                ),
 
                 const SizedBox(height: 12),
 
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    _quickButton(
-                        "user",
-                            () => _quickLogin("dm3348412@gmail.com")),
-                    _quickButton(
-                        "firmowner",
-                            () => _quickLogin("dm3348413@gmail.com")),
-                    _quickButton(
-                        "admin",
-                            () => _quickLogin("dm3348411@gmail.com")),
-                    _quickButton(
-                      "firmworker",
-                      () => _quickLogin(
-                        "dmytromorozov57@gmail.com",
-                        password: "dmytromorozov57@gmail.com",
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
@@ -279,41 +236,6 @@ class _AuthScreenState extends State<AuthScreen> {
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide.none,
         ),
-      ),
-    );
-  }
-
-  Widget _quickButton(String text, VoidCallback action) {
-    return GestureDetector(
-      onTap: action,
-      child: Builder(
-        builder: (context) {
-          final theme = Theme.of(context);
-          final isDark = theme.brightness == Brightness.dark;
-          
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
-            decoration: BoxDecoration(
-              color: isDark ? theme.cardColor : Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(isDark ? 0.3 : 0.04),
-                  blurRadius: 6,
-                  offset: const Offset(0, 3),
-                )
-              ],
-            ),
-            child: Text(
-              text,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                color: isDark ? Colors.white : theme.colorScheme.onSurface,
-              ),
-            ),
-          );
-        },
       ),
     );
   }

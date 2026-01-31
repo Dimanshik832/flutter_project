@@ -9,7 +9,6 @@ import '../../services/firestore_paths.dart';
 import '../../widgets/app_card.dart';
 import 'settings_screen.dart';
 import 'edit_profile_screen.dart';
-import '../admin/test_tools_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -168,20 +167,6 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                    );
-                  },
-                ),
-
-                
-                
-                
-                _tile(
-                  icon: Icons.bug_report_outlined,
-                  title: l10n.developerTools,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const DebugToolsScreen()),
                     );
                   },
                 ),
