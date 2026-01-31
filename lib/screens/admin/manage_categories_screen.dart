@@ -30,6 +30,10 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
     Icons.eco,
     Icons.wifi,
   ];
+  late final Map<int, IconData> _iconByCodePoint = {
+    for (final icon in availableIcons) icon.codePoint: icon,
+  };
+
 
   IconData newCategoryIcon = Icons.build;
 
@@ -185,8 +189,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
       ) async {
     final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: oldName);
-    IconData selectedIcon =
-    IconData(oldIcon, fontFamily: 'MaterialIcons');
+    IconData selectedIcon = _iconByCodePoint[oldIcon] ?? Icons.build;
+
 
     final bool? ok = await showDialog<bool>(
       context: context,
@@ -250,7 +254,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   
   
   Widget _categoryCard(String name, String id, int iconCode) {
-    final icon = IconData(iconCode, fontFamily: 'MaterialIcons');
+    final icon = _iconByCodePoint[iconCode] ?? Icons.build;
+
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
